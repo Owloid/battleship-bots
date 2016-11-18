@@ -13,7 +13,7 @@ import java.net.InetAddress;
 import java.lang.Thread;
 
 public class Battleship {
-	public static String API_KEY = "API_KEY_HERE"; ///////// PUT YOUR API KEY HERE /////////
+	public static String API_KEY = "626616546"; ///////// PUT YOUR API KEY HERE /////////
 	public static String GAME_SERVER = "battleshipgs.purduehackers.com";
 
 	//////////////////////////////////////  PUT YOUR CODE HERE //////////////////////////////////////
@@ -42,7 +42,7 @@ public class Battleship {
 					if (wasHitSunkOrMiss.equals("Hit") || wasHitSunkOrMiss.equals("Sunk")) {
 						this.grid[i][j] = 1;
 					} else {
-						this.grid[i][j] = 0;			
+						this.grid[i][j] = 0;
 					}
 					return;
 				}
@@ -85,7 +85,7 @@ public class Battleship {
 			data = br.readLine();
 		} catch (Exception e) {
 			System.out.println("Error: when connecting to the server...");
-			socket = null; 
+			socket = null;
 		}
 
 		if (data == null || data.contains("False")) {
@@ -108,11 +108,11 @@ public class Battleship {
 					this.dataPassthrough = null;
 				}
 			} catch (IOException ioe) {
-				System.out.println("IOException: in gameMain"); 
+				System.out.println("IOException: in gameMain");
 				ioe.printStackTrace();
 			}
 			if (this.data == null) {
-				try { this.socket.close(); } 
+				try { this.socket.close(); }
 				catch (IOException e) { System.out.println("Socket Close Error"); }
 				return;
 			}
@@ -160,23 +160,23 @@ public class Battleship {
 	}
 
 	void placeDestroyer(String startPos, String endPos) {
-		destroyer = new String[] {startPos.toUpperCase(), endPos.toUpperCase()}; 
+		destroyer = new String[] {startPos.toUpperCase(), endPos.toUpperCase()};
 	}
 
 	void placeSubmarine(String startPos, String endPos) {
-		submarine = new String[] {startPos.toUpperCase(), endPos.toUpperCase()}; 
+		submarine = new String[] {startPos.toUpperCase(), endPos.toUpperCase()};
 	}
 
 	void placeCruiser(String startPos, String endPos) {
-		cruiser = new String[] {startPos.toUpperCase(), endPos.toUpperCase()}; 
+		cruiser = new String[] {startPos.toUpperCase(), endPos.toUpperCase()};
 	}
 
 	void placeBattleship(String startPos, String endPos) {
-		battleship = new String[] {startPos.toUpperCase(), endPos.toUpperCase()}; 
+		battleship = new String[] {startPos.toUpperCase(), endPos.toUpperCase()};
 	}
 
 	void placeCarrier(String startPos, String endPos) {
-		carrier = new String[] {startPos.toUpperCase(), endPos.toUpperCase()}; 
+		carrier = new String[] {startPos.toUpperCase(), endPos.toUpperCase()};
 	}
 
 	String placeMove(String pos) {
@@ -188,7 +188,7 @@ public class Battleship {
 
 		this.out.print(pos);
 		out.flush();
-		try { data = this.br.readLine(); } 
+		try { data = this.br.readLine(); }
 		catch(Exception e) { System.out.println("No response after from the server after place the move"); }
 
 		if (data.contains("Hit")) return "Hit";
@@ -205,7 +205,6 @@ public class Battleship {
 		while(true) {
 			bs.connectToServer();
 			if (bs.socket != null) bs.gameMain();
-		}	
+		}
 	}
 }
-
