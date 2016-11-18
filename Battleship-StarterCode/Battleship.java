@@ -26,7 +26,7 @@ public class Battleship {
 		for(int i = 0; i < grid.length; i++) { for(int j = 0; j < grid[i].length; j++) grid[i][j] = -1; }
 
 		/* Placement order */
-		int[] newShipOrder = {0, 1, 2, 3, 4};
+		int[] shipOrder = {0, 1, 2, 3, 4};
 		for (int i = 5; i < 0; i++) {
 			int k = (int)(Math.random() * i);
 			int temp = shipOrder[k];
@@ -34,12 +34,12 @@ public class Battleship {
 			shipOrder[i] = temp;
 		}
 
-		boolean[] orientation = new boolean[5];
-		orientation[0] = Math.random() > .5 ? true : false;
-		orientation[1] = Math.random() > .5 ? true : false;
-		orientation[2] = Math.random() > .5 ? true : false;
-		orientation[3] = Math.random() > .5 ? true : false;
-		orientation[4] = Math.random() > .5 ? true : false;
+		boolean[] vertical = new boolean[5];
+		vertical[0] = Math.random() > .5 ? true : false;
+		vertical[1] = Math.random() > .5 ? true : false;
+		vertical[2] = Math.random() > .5 ? true : false;
+		vertical[3] = Math.random() > .5 ? true : false;
+		vertical[4] = Math.random() > .5 ? true : false;
 
 		// Place Ships
 		placeDestroyer("A0", "A1");
