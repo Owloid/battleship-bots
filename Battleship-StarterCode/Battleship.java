@@ -76,7 +76,7 @@ public class Battleship {
 
 	String[] makeRandomPlacement(int length, boolean vertical) {
 		sunkShips = new boolean[5];
-		for (int i = 0; i < 5; ++) {
+		for (int i = 0; i < 5; i++) {
 			sunkShips[i] = false;
 		}
 
