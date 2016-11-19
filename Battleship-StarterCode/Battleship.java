@@ -138,13 +138,13 @@ public class Battleship {
 		// _ X _
 		if (this.grid[y][x] != -1)
 			return false;
-		if (this.grid[y-1][x] != -1)
+		if ((y - 1 > 0) && this.grid[y-1][x] != -1)
 			return false;
-		if (this.grid[y+1][x] != -1)
+		if ((y + 1 < 7) && this.grid[y+1][x] != -1)
 			return false;
-		if (this.grid[y][x-1] != -1)
+		if ((x - 1 > 0) && this.grid[y][x-1] != -1)
 			return false;
-		if (this.grid[y][x+1] != -1)
+		if ((x + 1 < 7) && this.grid[y][x+1] != -1)
 			return false;
 		return true;
 	}
@@ -184,6 +184,8 @@ public class Battleship {
 				}
 
 				y = y * 3 + vertOffset; // Scale y position to board, add vertical offset.
+
+				System.out.println(x + ", " + y);
 
 				if (moveIsReasonable(x, y)) {
 					// Fire!
