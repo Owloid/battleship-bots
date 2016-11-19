@@ -35,11 +35,11 @@ public class Battleship {
 		}
 
 		boolean[] vertical = new boolean[5];
-		vertical[0] = Math.random() > .5 ? true : false;
-		vertical[1] = Math.random() > .5 ? true : false;
-		vertical[2] = Math.random() > .5 ? true : false;
-		vertical[3] = Math.random() > .5 ? true : false;
-		vertical[4] = Math.random() > .5 ? true : false;
+		vertical[0] = Math.random() > 0.5 ? true : false;
+		vertical[1] = Math.random() > 0.5 ? true : false;
+		vertical[2] = Math.random() > 0.5 ? true : false;
+		vertical[3] = Math.random() > 0.5 ? true : false;
+		vertical[4] = Math.random() > 0.5 ? true : false;
 
 		// Place Ships
 		for (int i = 0; i < 5; i++) {
