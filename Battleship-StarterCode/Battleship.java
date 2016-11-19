@@ -197,10 +197,14 @@ public class Battleship {
 		if (wasHit) {
 			//intelligentSearch();
 		} else {
-			String hitSunkMiss;
-			int x;
-			int y;
+			String hitSunkMiss = "None";
+			int countTried = 0;
+			int x = 0;
+			int y = 0;
 			while (true) { // Each slot has a 4.55% chance of being selected each roll.
+				if (countTried >= 30) {
+					break;
+				}
 				x = generator.nextInt(7 + 1); // Select column 0-7 randomly.
 
 				int vertOffset = x % 3;
@@ -213,14 +217,27 @@ public class Battleship {
 
 				y = y * 3 + vertOffset; // Scale y position to board, add vertical offset.
 
-				System.out.println(x + ", " + y);
-
 				if (moveIsReasonable(x, y)) {
 					// Fire!
+					System.out.println("[Simple]: Firing at tile (" + x + ", " + y + ")...");
 					hitSunkMiss = placeMove(this.letters[y] + String.valueOf(x));
+					System.out.println("[Simple]: " + hitSunkMiss + ".");
 					break; // Exit infinite loop. We had a reasonable move and took it.
 				}
+				countTried++;
 				// Otherwise, move sucks. So reroll.
+			}
+
+			if (countTried >= 30 && hitSunkMiss.equals("None")) {
+				for(y = 0; y < 8; y++) {
+					for (x = 0; x < 8; x++) {
+						if (this.grid[y][x] == -1) {
+							System.out.println("[Random]: Firing at tile (" + x + ", " + y + ")...");
+							hitSunkMiss = placeMove(this.letters[y] + String.valueOf(x));
+							System.out.println("[Random]: " + hitSunkMiss + ".");
+						}
+					}
+				}
 			}
 
 			if (hitSunkMiss.equals("Hit")) {
