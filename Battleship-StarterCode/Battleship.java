@@ -24,6 +24,8 @@ public class Battleship {
 	char[] letters;
 	int[][] grid; //[y][x]
 	boolean wasHit = false;
+	// sunkShips {2, 3, 3, 4, 5}
+	boolean[] sunkShips;
 
 	boolean[][] placementGrid = new boolean[8][8];
 	boolean validPlacement(int row, int col, int length, boolean vertical) {
@@ -73,6 +75,11 @@ public class Battleship {
 	}
 
 	String[] makeRandomPlacement(int length, boolean vertical) {
+		sunkShips = new boolean[5];
+		for (int i = 0; i < 5; ++) {
+			sunkShips[i] = false;
+		}
+
 		String[] placement = new String[2];
 
 		int row = (int)(Math.random() * 8);
