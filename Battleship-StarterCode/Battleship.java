@@ -25,16 +25,110 @@ public class Battleship {
 	int[][] grid; //[y][x]
 	boolean wasHit = false;
 
+	boolean[][] placementGrid = new boolean[8][8];
+	boolean validPlacement(int row, int col, int length, boolean vertical) {
+		if (vertical) {
+			for (int i = 0; i < length; i++) {
+				if (row+i >= 8 || placementGrid[row+i][col]) {
+					return false;
+				}
+			}
+		}
+		else {
+			for (int i = 0; i < length; i++) {
+				if (col+i >= 8 || placementGrid[row][col+i]) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	String[] makeRandomPlacement(int length, boolean vertical) {
+		String[] placement = new String[2];
+
+		int row = (int)(Math.random() * 8);
+		int col = (int)(Math.random() * 8);
+
+		while (!validPlacement(row, col, length, vertical)) {
+			row = (int)(Math.random() * 8);
+			col = (int)(Math.random() * 8);
+		}
+
+		placement[0] = this.letters[row] + String.valueOf(col);
+		if (vertical) {
+			placement[1] = this.letters[row+length-1] + String.valueOf(col);
+			for (int i = 0; i < length; i++) {
+				placementGrid[row+i][col] = true;
+			}
+		}
+		else {
+			placement[1] = this.letters[row] + String.valueOf(col+length-1);
+			for (int i = 0; i < length; i++) {
+				placementGrid[row][col+i] = true;
+			}
+		}
+
+		return placement;
+	}
+
 	void placeShips(String opponentID) {
 		// Fill Grid With -1s
 		for(int i = 0; i < grid.length; i++) { for(int j = 0; j < grid[i].length; j++) grid[i][j] = -1; }
 
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				placementGrid[i][j] = false;
+			}
+		}
+
+		/* Placement order */
+		int[] shipOrder = {0, 1, 2, 3, 4};
+		for (int i = 4; i >= 1; i--) {
+			int k = (int)(Math.random() * (i+1));
+			int temp = shipOrder[k];
+			shipOrder[k] = shipOrder[i];
+			shipOrder[i] = temp;
+		}
+
+
+		boolean[] vertical = new boolean[5];
+		vertical[0] = Math.random() > 0.5 ? true : false;
+		vertical[1] = Math.random() > 0.5 ? true : false;
+		vertical[2] = Math.random() > 0.5 ? true : false;
+		vertical[3] = Math.random() > 0.5 ? true : false;
+		vertical[4] = Math.random() > 0.5 ? true : false;
+
 		// Place Ships
-		placeDestroyer("A0", "A1");
-		placeSubmarine("B0", "B2");
-		placeCruiser("C0", "C2");
-		placeBattleship("D0", "D3");
-		placeCarrier("E0", "E4");
+		for (int i = 0; i < 5; i++) {
+			int shipNum = shipOrder[i];
+
+			String[] placement = null;
+
+			switch (shipNum) {
+				case 0:
+					placement = makeRandomPlacement(2, vertical[0]);
+					placeDestroyer(placement[0], placement[1]);
+					break;
+				case 1:
+					placement = makeRandomPlacement(3, vertical[1]);
+					placeSubmarine(placement[0], placement[1]);
+					break;
+				case 2:
+					placement = makeRandomPlacement(3, vertical[2]);
+					placeCruiser(placement[0], placement[1]);
+					break;
+				case 3:
+					placement = makeRandomPlacement(4, vertical[3]);
+					placeBattleship(placement[0], placement[1]);
+					break;
+				case 4:
+					placement = makeRandomPlacement(5, vertical[4]);
+					placeCarrier(placement[0], placement[1]);
+					break;
+			}
+		}
+
 	}
 
 	boolean moveIsReasonable(int x, int y) {
