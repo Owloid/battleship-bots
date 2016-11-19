@@ -28,16 +28,44 @@ public class Battleship {
 	boolean[][] placementGrid = new boolean[8][8];
 	boolean validPlacement(int row, int col, int length, boolean vertical) {
 		if (vertical) {
+			if (col-1 >= 0) {
+				for (int i = 0; i < length; i++) {
+					if (row+i >= 8 || placementGrid[row+i][col-1]) {
+						return false;
+					}
+				}
+			}
 			for (int i = 0; i < length; i++) {
 				if (row+i >= 8 || placementGrid[row+i][col]) {
 					return false;
 				}
 			}
+			if (col+1 <= 7) {
+				for (int i = 0; i < length; i++) {
+					if (row+i >= 8 || placementGrid[row+i][col+1]) {
+						return false;
+					}
+				}
+			}
 		}
 		else {
+			if (row-1 >= 0) {
+				for (int i = 0; i < length; i++) {
+					if (col+i >= 8 || placementGrid[row-1][col+i]) {
+						return false;
+					}
+				}
+			}
 			for (int i = 0; i < length; i++) {
 				if (col+i >= 8 || placementGrid[row][col+i]) {
 					return false;
+				}
+			}
+			if (row+1 <= 7) {
+				for (int i = 0; i < length; i++) {
+					if (col+i >= 8 || placementGrid[row+1][col+i]) {
+						return false;
+					}
 				}
 			}
 		}
