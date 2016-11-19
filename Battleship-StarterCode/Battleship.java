@@ -100,6 +100,224 @@ public class Battleship {
 		return placement;
 	}
 
+
+	boolean wasHit = false;                 //ARUN
+    int[] lastHit = new int[2];             //ARUN
+    String direction = "UP";
+
+
+    void intelligentSearch()                //All Arun
+    {
+        if(direction.equals("UP")) {
+            String s = "" + lastHit[1];
+            switch (lastHit[0]) {
+                case 1:
+                    s = "A" + s;
+                    break;
+                case 2:
+                    s = "B" + s;
+                    break;
+                case 3:
+                    s = "C" + s;
+                    break;
+                case 4:
+                    s = "D" + s;
+                    break;
+                case 5:
+                    s = "E" + s;
+                    break;
+                case 6:
+                    s = "F" + s;
+                    break;
+                case 7:
+                    s = "G" + s;
+                    break;
+                default:
+                    direction = "DOWN";
+                    intelligentSearch();
+                    return;
+            }
+            String s2 = placeMove(s);
+            if (s2.equals("HIT")) {
+                int i = lastHit[0] + 1;
+                lastHit[0] = i;
+            }
+            if (s2.equals("MISS")) {
+                direction = "DOWN";
+            }
+            if (s2.equals("SUNK")) {
+                wasHit = true;
+            }
+            return;
+        }
+
+        if(direction.equals("DOWN"))
+        {
+            String s = "" + lastHit[1];
+            switch(lastHit[0])
+            {
+                case 0:
+                    s = "B" + s;
+                    break;
+                case 1:
+                    s = "C" + s;
+                    break;
+                case 2:
+                    s = "D" + s;
+                    break;
+                case 3:
+                    s = "E" + s;
+                    break;
+                case 4:
+                    s = "F" + s;
+                    break;
+                case 5:
+                    s = "G" + s;
+                    break;
+                case 6:
+                    s = "H" + s;
+                    break;
+                default:
+                    direction = "RIGHT";
+                    intelligentSearch();
+                    return;
+            }
+            String s2 = placeMove(s);
+            if(s2.equals("HIT"))
+            {
+                int i = lastHit[0] + 1;
+                lastHit[0] = i;
+            }
+            if(s2.equals("MISS"))
+            {
+                direction = "RIGHT";
+            }
+            if(s2.equals("SUNK"))
+            {
+                wasHit = true;
+            }
+            return;
+        }
+
+        if(direction.equals("RIGHT"))
+        {
+            char c = ' ';
+            switch(lastHit[0])
+            {
+                case 0:
+                    c = 'A';
+                    break;
+                case 1:
+                    c = 'B';
+                    break;
+                case 2:
+                    c = 'C';
+                    break;
+                case 3:
+                    c = 'D';
+                    break;
+                case 4:
+                    c = 'E';
+                    break;
+                case 5:
+                    c = 'F';
+                    break;
+                case 6:
+                    c = 'G';
+                    break;
+                case 7:
+                    c = 'H';
+                    break;
+            }
+
+            String s = "" + c;
+            if(lastHit[1] < 7)
+            {
+                int i = lastHit[1] + 1;
+                s += i;
+                String s2 = placeMove(s);
+                if(s2.equals("HIT"))
+                {
+                    lastHit[1] = i;
+                }
+                if(s2.equals("MISS"))
+                {
+                    direction = "LEFT";
+                }
+                if(s2.equals("SUNK"))
+                {
+                    wasHit = true;
+                }
+                return;
+            }
+            else
+            {
+                direction = "LEFT";
+                intelligentSearch();
+                return;
+            }
+        }
+
+        if(direction.equals("RIGHT"))
+        {
+            char c = ' ';
+            switch(lastHit[0])
+            {
+                case 0:
+                    c = 'A';
+                    break;
+                case 1:
+                    c = 'B';
+                    break;
+                case 2:
+                    c = 'C';
+                    break;
+                case 3:
+                    c = 'D';
+                    break;
+                case 4:
+                    c = 'E';
+                    break;
+                case 5:
+                    c = 'F';
+                    break;
+                case 6:
+                    c = 'G';
+                    break;
+                case 7:
+                    c = 'H';
+                    break;
+            }
+
+            String s = "" + c;
+            if(lastHit[1] > 0)
+            {
+                int i = lastHit[1] - 1;
+                s += i;
+                String s2 = placeMove(s);
+                if(s2.equals("HIT"))
+                {
+                   lastHit[1] = i;
+                }
+                if(s2.equals("MISS"))
+                {
+                    direction = "UP";
+                }
+                if(s2.equals("SUNK"))
+                {
+                    wasHit = true;
+                }
+                return;
+            }
+            else
+            {
+                direction = "UP";
+                intelligentSearch();
+                return;
+            }
+        }
+    }
+
 	void placeShips(String opponentID) {
 		// Fill Grid With -1s
 		for(int i = 0; i < grid.length; i++) { for(int j = 0; j < grid[i].length; j++) grid[i][j] = -1; }
@@ -182,9 +400,12 @@ public class Battleship {
 			for(int j = 0; j < 8; j++) {
 				if (this.grid[i][j] == -1) {
 					String wasHitSunkOrMiss = placeMove(this.letters[i] + String.valueOf(j));
-
 					if (wasHitSunkOrMiss.equals("Hit") || wasHitSunkOrMiss.equals("Sunk")) {
 						this.grid[i][j] = 1;
+                        //ARUN
+                        lastHit[0] = i;
+                        lastHit[1] = j;
+                        //ARUN
 					} else {
 						this.grid[i][j] = 0;
 					}
