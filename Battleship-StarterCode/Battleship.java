@@ -54,8 +54,6 @@ public class Battleship {
 			col = (int)(Math.random() * 8);
 		}
 
-		System.out.println("row: "+row+", col: "+col+", length: "+length+" vert: "+vertical);
-
 		placement[0] = this.letters[row] + String.valueOf(col);
 		if (vertical) {
 			placement[1] = this.letters[row+length-1] + String.valueOf(col);
@@ -127,12 +125,6 @@ public class Battleship {
 					placement = makeRandomPlacement(5, vertical[4]);
 					placeCarrier(placement[0], placement[1]);
 					break;
-			}
-			for (int w = 0; w < 8; w++) {
-				for (int j = 0; j < 8; j++) {
-					System.out.print(placementGrid[w][j] + ", ");
-				}
-				System.out.println();
 			}
 		}
 
