@@ -108,7 +108,7 @@ public class Battleship {
 	}
 
 
-	boolean wasHit = false;                 //ARUN
+	//boolean wasHit = false;                 //ARUN
     int[] lastHit = new int[2];             //ARUN
     String direction = "UP";
 
@@ -447,7 +447,7 @@ public class Battleship {
 
 				if (moveIsReasonable(x, y)) {
 					// Fire!
-					System.out.println("[Simple]: Firing at tile (" + x + ", " + y + ")...");
+					System.out.println("[Simple]: Firing at tile (" + x + ", " + y + ")[" + this.letters[y] + String.valueOf(x) + "]...");
 					hitSunkMiss = placeMove(this.letters[y] + String.valueOf(x));
 					System.out.println("[Simple]: " + hitSunkMiss + ".");
 					break; // Exit infinite loop. We had a reasonable move and took it.
@@ -461,7 +461,7 @@ public class Battleship {
 				for(y = 0; y < 8; y++) {
 					for (x = 0; x < 8; x++) {
 						if (this.grid[y][x] == -1) {
-							System.out.println("[Random]: Firing at tile (" + x + ", " + y + ")...");
+							System.out.println("[Random]: Firing at tile (" + x + ", " + y + ")[" + this.letters[y] + String.valueOf(x) + "]...");
 							hitSunkMiss = placeMove(this.letters[y] + String.valueOf(x));
 							System.out.println("[Random]: " + hitSunkMiss + ".");
 							quit = true;
