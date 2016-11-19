@@ -229,13 +229,19 @@ public class Battleship {
 			}
 
 			if (countTried >= 30 && hitSunkMiss.equals("None")) {
+				boolean quit = false;
 				for(y = 0; y < 8; y++) {
 					for (x = 0; x < 8; x++) {
 						if (this.grid[y][x] == -1) {
 							System.out.println("[Random]: Firing at tile (" + x + ", " + y + ")...");
 							hitSunkMiss = placeMove(this.letters[y] + String.valueOf(x));
 							System.out.println("[Random]: " + hitSunkMiss + ".");
+							quit = true;
+							break;
 						}
+					}
+					if (quit) {
+						break;
 					}
 				}
 			}
