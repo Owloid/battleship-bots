@@ -11,6 +11,7 @@ import java.io.*;
 import java.net.Socket;
 import java.net.InetAddress;
 import java.lang.Thread;
+import java.util.Random;
 
 public class Battleship {
 	public static String API_KEY = "626616546"; ///////// PUT YOUR API KEY HERE /////////
@@ -18,8 +19,10 @@ public class Battleship {
 
 	//////////////////////////////////////  PUT YOUR CODE HERE //////////////////////////////////////
 
+	Random generator = new Random();
+
 	char[] letters;
-	int[][] grid;
+	int[][] grid; //[y][x]
 
 	void placeShips(String opponentID) {
 		// Fill Grid With -1s
@@ -33,8 +36,27 @@ public class Battleship {
 		placeCarrier("E0", "E4");
 	}
 
+	boolean moveIsReasonable(int x, int y) {
+		// Check locations on X's for fired areas.
+		// _ X _
+		// X X X
+		// _ X _
+		if (this.grid[x][y] != -1)
+			return false;
+		if (this.grid[x-1][y] != -1)
+			return false;
+		if (this.grid[x+1][y] != -1)
+			return false;
+		if (this.grid[x][y-1] != -1)
+			return false;
+		if (this.grid[x][y+1] != -1)
+			return false;
+		return true;
+	}
+}
+
 	void makeMove() {
-		for(int i = 0; i < 8; i++) {
+		/*for(int i = 0; i < 8; i++) {
 			for(int j = 0; j < 8; j++) {
 				if (this.grid[i][j] == -1) {
 					String wasHitSunkOrMiss = placeMove(this.letters[i] + String.valueOf(j));
@@ -45,6 +67,28 @@ public class Battleship {
 						this.grid[i][j] = 0;
 					}
 					return;
+				}
+			}
+		}*/
+
+
+		if (wasHit) {
+			intelligentSearch();
+		} else {
+			String hitSunkMiss;
+			while (true) {
+				int ix = generator.nextInt(8 + 1); // Select column;
+
+				for (int y = 0; y < 8; y++) {
+					int vertOffset = ix % 3;
+
+					if (moveIsReasonable(ix, y + vertOffset)) {
+
+					} else if (moveIsReasonable(ix, y + vertOffset + 3)) {
+
+					} else if ((y + vertOffset + 6) < 8 && moveIsReasonable(ix, y + vertOffset + 6)) {
+
+					}
 				}
 			}
 		}
