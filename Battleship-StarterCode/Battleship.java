@@ -27,8 +27,8 @@ public class Battleship {
 
 		/* Placement order */
 		int[] shipOrder = {0, 1, 2, 3, 4};
-		for (int i = 5; i < 0; i++) {
-			int k = (int)(Math.random() * i);
+		for (int i = 4; i < 1; i++) {
+			int k = (int)(Math.random() * (i+1));
 			int temp = shipOrder[k];
 			shipOrder[k] = shipOrder[i];
 			shipOrder[i] = temp;
@@ -42,11 +42,28 @@ public class Battleship {
 		vertical[4] = Math.random() > .5 ? true : false;
 
 		// Place Ships
-		placeDestroyer("A0", "A1");
-		placeSubmarine("B0", "B2");
-		placeCruiser("C0", "C2");
-		placeBattleship("D0", "D3");
-		placeCarrier("E0", "E4");
+		for (int i = 0; i < 5; i++) {
+			int shipNum = shipOrder[i];
+
+			switch (shipNum) {
+				case 0:
+					placeDestroyer("A0", "A1");
+					break;
+				case 1:
+					placeSubmarine("B0", "B2");
+					break;
+				case 2:
+					placeCruiser("C0", "C2");
+					break;
+				case 3:
+					placeBattleship("D0", "D3");
+					break;
+				case 4:
+					placeCarrier("E0", "E4");
+					break;
+			}
+		}
+
 	}
 
 	void makeMove() {
