@@ -421,9 +421,9 @@ public class Battleship {
 			}
 		}*/
 
-		wasHit = false;
 		if (wasHit) {
-			//intelligentSearch();
+			System.out.println("Passing to intelligent search.");
+			intelligentSearch();
 		} else {
 			String hitSunkMiss = "None";
 			int countTried = 0;
@@ -477,6 +477,9 @@ public class Battleship {
 			if (hitSunkMiss.equals("Hit")) {
 				this.grid[y][x] = 1;
 				wasHit = true;
+				// Pass to intelligent search
+				lastHit[0] = y;
+				lastHit[1] = x;
 			} else if (hitSunkMiss.equals("Sunk")) {
 				this.grid[y][x] = 1;
 			} else {
