@@ -41,15 +41,15 @@ public class Battleship {
 		// _ X _
 		// X X X
 		// _ X _
-		if (this.grid[x][y] != -1)
+		if (this.grid[y][x] != -1)
 			return false;
-		if (this.grid[x-1][y] != -1)
+		if (this.grid[y-1][x] != -1)
 			return false;
-		if (this.grid[x+1][y] != -1)
+		if (this.grid[y+1][x] != -1)
 			return false;
-		if (this.grid[x][y-1] != -1)
+		if (this.grid[y][x-1] != -1)
 			return false;
-		if (this.grid[x][y+1] != -1)
+		if (this.grid[y][x+1] != -1)
 			return false;
 		return true;
 	}
@@ -76,20 +76,35 @@ public class Battleship {
 			intelligentSearch();
 		} else {
 			String hitSunkMiss;
-			while (true) {
-				int ix = generator.nextInt(8 + 1); // Select column;
+			while (true) { // Each slot has a 4.55% chance of being selected each roll.
+				int x = generator.nextInt(7 + 1); // Select column 0-7 randomly.
 
-				for (int y = 0; y < 8; y++) {
-					int vertOffset = ix % 3;
+				int vertOffset = x % 3;
+				int y;
 
-					if (moveIsReasonable(ix, y + vertOffset)) {
-
-					} else if (moveIsReasonable(ix, y + vertOffset + 3)) {
-
-					} else if ((y + vertOffset + 6) < 8 && moveIsReasonable(ix, y + vertOffset + 6)) {
-
-					}
+				if ((vertOffset + 6) < 8) { // Check if the third slot is available.
+					y = generator.nextInt(2 + 1); // Select row slot 0-2 randomly.
+				} else {
+					y = generator.nextInt(1 + 1); // Select row slot 0-1 randomly.
 				}
+
+				y = y * 3 + vertOffset; // Scale y position to board, add vertical offset.
+
+				if (moveIsReasonable(x, y)) {
+					// Fire!
+					hitSunkMiss = placeMove(this.letters[y] + String.valueof(x));
+					break; // Exit infinite loop. We had a reasonable move and took it.
+				}
+				// Otherwise, move sucks. So reroll.
+			}
+
+			if (hitSunkMiss.equals("Hit")) {
+				this.grid[y][x] = 1;
+				intelligentSearch();
+			} else if (hitSunkMiss.equals("Sunk")) {
+				this.grid[y][x] = 1;
+			} else {
+				this.grid[y][x] = 0;
 			}
 		}
 	}
