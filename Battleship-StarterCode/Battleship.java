@@ -11,6 +11,7 @@ import java.io.*;
 import java.net.Socket;
 import java.net.InetAddress;
 import java.lang.Thread;
+import java.util.Random;
 
 public class Battleship {
 	public static String API_KEY = "626616546"; ///////// PUT YOUR API KEY HERE /////////
@@ -18,8 +19,10 @@ public class Battleship {
 
 	//////////////////////////////////////  PUT YOUR CODE HERE //////////////////////////////////////
 
+	Random generator = new Random();
+
 	char[] letters;
-	int[][] grid;
+	int[][] grid; //[y][x]
 
 	boolean[][] placementGrid = new boolean[8][8];
 	boolean validPlacement(int row, int col, int length, boolean vertical) {
@@ -135,8 +138,27 @@ public class Battleship {
 
 	}
 
+	boolean moveIsReasonable(int x, int y) {
+		// Check locations on X's for fired areas.
+		// _ X _
+		// X X X
+		// _ X _
+		if (this.grid[y][x] != -1)
+			return false;
+		if (this.grid[y-1][x] != -1)
+			return false;
+		if (this.grid[y+1][x] != -1)
+			return false;
+		if (this.grid[y][x-1] != -1)
+			return false;
+		if (this.grid[y][x+1] != -1)
+			return false;
+		return true;
+	}
+}
+
 	void makeMove() {
-		for(int i = 0; i < 8; i++) {
+		/*for(int i = 0; i < 8; i++) {
 			for(int j = 0; j < 8; j++) {
 				if (this.grid[i][j] == -1) {
 					String wasHitSunkOrMiss = placeMove(this.letters[i] + String.valueOf(j));
@@ -148,6 +170,43 @@ public class Battleship {
 					}
 					return;
 				}
+			}
+		}*/
+
+
+		if (wasHit) {
+			intelligentSearch();
+		} else {
+			String hitSunkMiss;
+			while (true) { // Each slot has a 4.55% chance of being selected each roll.
+				int x = generator.nextInt(7 + 1); // Select column 0-7 randomly.
+
+				int vertOffset = x % 3;
+				int y;
+
+				if ((vertOffset + 6) < 8) { // Check if the third slot is available.
+					y = generator.nextInt(2 + 1); // Select row slot 0-2 randomly.
+				} else {
+					y = generator.nextInt(1 + 1); // Select row slot 0-1 randomly.
+				}
+
+				y = y * 3 + vertOffset; // Scale y position to board, add vertical offset.
+
+				if (moveIsReasonable(x, y)) {
+					// Fire!
+					hitSunkMiss = placeMove(this.letters[y] + String.valueof(x));
+					break; // Exit infinite loop. We had a reasonable move and took it.
+				}
+				// Otherwise, move sucks. So reroll.
+			}
+
+			if (hitSunkMiss.equals("Hit")) {
+				this.grid[y][x] = 1;
+				intelligentSearch();
+			} else if (hitSunkMiss.equals("Sunk")) {
+				this.grid[y][x] = 1;
+			} else {
+				this.grid[y][x] = 0;
 			}
 		}
 	}
