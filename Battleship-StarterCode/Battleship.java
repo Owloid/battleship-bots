@@ -23,6 +23,7 @@ public class Battleship {
 
 	char[] letters;
 	int[][] grid; //[y][x]
+	boolean wasHit = false;
 
 	void placeShips(String opponentID) {
 		// Fill Grid With -1s
@@ -53,7 +54,6 @@ public class Battleship {
 			return false;
 		return true;
 	}
-}
 
 	void makeMove() {
 		/*for(int i = 0; i < 8; i++) {
@@ -71,16 +71,17 @@ public class Battleship {
 			}
 		}*/
 
-
+		wasHit = false;
 		if (wasHit) {
-			intelligentSearch();
+			//intelligentSearch();
 		} else {
 			String hitSunkMiss;
+			int x;
+			int y;
 			while (true) { // Each slot has a 4.55% chance of being selected each roll.
-				int x = generator.nextInt(7 + 1); // Select column 0-7 randomly.
+				x = generator.nextInt(7 + 1); // Select column 0-7 randomly.
 
 				int vertOffset = x % 3;
-				int y;
 
 				if ((vertOffset + 6) < 8) { // Check if the third slot is available.
 					y = generator.nextInt(2 + 1); // Select row slot 0-2 randomly.
@@ -92,7 +93,7 @@ public class Battleship {
 
 				if (moveIsReasonable(x, y)) {
 					// Fire!
-					hitSunkMiss = placeMove(this.letters[y] + String.valueof(x));
+					hitSunkMiss = placeMove(this.letters[y] + String.valueOf(x));
 					break; // Exit infinite loop. We had a reasonable move and took it.
 				}
 				// Otherwise, move sucks. So reroll.
@@ -100,7 +101,7 @@ public class Battleship {
 
 			if (hitSunkMiss.equals("Hit")) {
 				this.grid[y][x] = 1;
-				intelligentSearch();
+				wasHit = true;
 			} else if (hitSunkMiss.equals("Sunk")) {
 				this.grid[y][x] = 1;
 			} else {
