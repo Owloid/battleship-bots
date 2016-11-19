@@ -25,14 +25,14 @@ public class Battleship {
 	boolean validPlacement(int row, int col, int length, boolean vertical) {
 		if (vertical) {
 			for (int i = 0; i < length; i++) {
-				if (placementGrid[row+i][col]) {
+				if (row+i >= 8 || placementGrid[row+i][col]) {
 					return false;
 				}
 			}
 		}
 		else {
 			for (int i = 0; i < length; i++) {
-				if (placementGrid[row][col+i]) {
+				if (col+i >= 8 || placementGrid[row][col+i]) {
 					return false;
 				}
 			}
@@ -42,11 +42,6 @@ public class Battleship {
 
 	String[] makeRandomPlacement(int length, boolean vertical) {
 		String[] placement = new String[2];
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				placementGrid[i][j] = false;
-			}
-		}
 
 		int row = (int)(Math.random() * 8);
 		int col = (int)(Math.random() * 8);
@@ -56,15 +51,17 @@ public class Battleship {
 			col = (int)(Math.random() * 8);
 		}
 
+		System.out.println("row: "+row+", col: "+col+", length: "+length+" vert: "+vertical);
+
 		placement[0] = this.letters[row] + String.valueOf(col);
 		if (vertical) {
-			placement[1] = this.letters[row+length] + String.valueOf(col);
+			placement[1] = this.letters[row+length-1] + String.valueOf(col);
 			for (int i = 0; i < length; i++) {
 				placementGrid[row+i][col] = true;
 			}
 		}
 		else {
-			placement[1] = this.letters[row] + String.valueOf(col+length);
+			placement[1] = this.letters[row] + String.valueOf(col+length-1);
 			for (int i = 0; i < length; i++) {
 				placementGrid[row][col+i] = true;
 			}
@@ -77,14 +74,21 @@ public class Battleship {
 		// Fill Grid With -1s
 		for(int i = 0; i < grid.length; i++) { for(int j = 0; j < grid[i].length; j++) grid[i][j] = -1; }
 
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				placementGrid[i][j] = false;
+			}
+		}
+
 		/* Placement order */
 		int[] shipOrder = {0, 1, 2, 3, 4};
-		for (int i = 4; i < 1; i++) {
+		for (int i = 4; i >= 1; i--) {
 			int k = (int)(Math.random() * (i+1));
 			int temp = shipOrder[k];
 			shipOrder[k] = shipOrder[i];
 			shipOrder[i] = temp;
 		}
+
 
 		boolean[] vertical = new boolean[5];
 		vertical[0] = Math.random() > 0.5 ? true : false;
@@ -120,6 +124,12 @@ public class Battleship {
 					placement = makeRandomPlacement(5, vertical[4]);
 					placeCarrier(placement[0], placement[1]);
 					break;
+			}
+			for (int w = 0; w < 8; w++) {
+				for (int j = 0; j < 8; j++) {
+					System.out.print(placementGrid[w][j] + ", ");
+				}
+				System.out.println();
 			}
 		}
 
