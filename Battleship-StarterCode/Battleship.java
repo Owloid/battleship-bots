@@ -110,219 +110,120 @@ public class Battleship {
 
 	//boolean wasHit = false;                 //ARUN
     int[] lastHit = new int[2];             //ARUN
-    String direction = "UP";
+    int direction = 0;
 
+		void nextDirection() {
+			direction = (direction+1)%4;
+		}
 
     void intelligentSearch()                //All Arun
     {
-        if(direction.equals("UP")) {
-            String s = "" + lastHit[1];
-            switch (lastHit[0]) {
-                case 1:
-                    s = "A" + s;
-                    break;
-                case 2:
-                    s = "B" + s;
-                    break;
-                case 3:
-                    s = "C" + s;
-                    break;
-                case 4:
-                    s = "D" + s;
-                    break;
-                case 5:
-                    s = "E" + s;
-                    break;
-                case 6:
-                    s = "F" + s;
-                    break;
-                case 7:
-                    s = "G" + s;
-                    break;
-                default:
-                    direction = "DOWN";
-                    intelligentSearch();
-                    return;
-            }
-            String s2 = placeMove(s);
-            if (s2.equals("HIT")) {
-                int i = lastHit[0] + 1;
-                lastHit[0] = i;
-            }
-            if (s2.equals("MISS")) {
-                direction = "DOWN";
-            }
-            if (s2.equals("SUNK")) {
-                wasHit = true;
-            }
-            return;
-        }
+  		int row = lastHit[0];
+  		int col = lastHit[1];
+			String hitSunkMiss = "";
 
-        if(direction.equals("DOWN"))
-        {
-            String s = "" + lastHit[1];
-            switch(lastHit[0])
-            {
-                case 0:
-                    s = "B" + s;
-                    break;
-                case 1:
-                    s = "C" + s;
-                    break;
-                case 2:
-                    s = "D" + s;
-                    break;
-                case 3:
-                    s = "E" + s;
-                    break;
-                case 4:
-                    s = "F" + s;
-                    break;
-                case 5:
-                    s = "G" + s;
-                    break;
-                case 6:
-                    s = "H" + s;
-                    break;
-                default:
-                    direction = "RIGHT";
-                    intelligentSearch();
-                    return;
-            }
-            String s2 = placeMove(s);
-            if(s2.equals("HIT"))
-            {
-                int i = lastHit[0] + 1;
-                lastHit[0] = i;
-            }
-            if(s2.equals("MISS"))
-            {
-                direction = "RIGHT";
-            }
-            if(s2.equals("SUNK"))
-            {
-                wasHit = true;
-            }
-            return;
-        }
+			nextDirection();
+			if (direction == 0) {
+				if (row+1 < 8 && grid[row+1][col] == -1) {
+					row++;
+					hitSunkMiss = placeMove(this.letters[row] + String.valueOf(col));
+				}
+				else if (row+1 < 8){
+					while(grid[row+1][col] != -1) {
+						row--;
+						if (row < 0) {
+							wasHit = false;
+							makeMove();
+							return;
+						}
+					}
+					hitSunkMiss = placeMove(this.letters[row] + String.valueOf(col));
+				}
+				else {
+					nextDirection();
+					intelligentSearch();
+					return;
+				}
+			}
+			else if (direction == 1) {
+				if (col+1 < 8 && grid[row][col+1] == -1) {
+					col++;
+					hitSunkMiss = placeMove(this.letters[row] + String.valueOf(col));
+				}
+				else if (col+1 < 8){
+					while(grid[row][col+1] != -1) {
+						col++;
+						if (row < 0) {
+							wasHit = false;
+							makeMove();
+							return;
+						}
+					}
+					hitSunkMiss = placeMove(this.letters[row] + String.valueOf(col));
+				}
+				else {
+					nextDirection();
+					intelligentSearch();
+					return;
+				}
+			}
+			else if (direction == 2) {
+				if (row-1 < 8 && grid[row-1][col] == -1) {
+					row--;
+					hitSunkMiss = placeMove(this.letters[row] + String.valueOf(col));
+				}
+				else if (row-1 < 8){
+					while(grid[row-1][col] != -1) {
+						row++;
+						if (row >= 8) {
+							wasHit = false;
+							makeMove();
+							return;
+						}
+					}
+					hitSunkMiss = placeMove(this.letters[row] + String.valueOf(col));
+				}
+				else {
+					nextDirection();
+					intelligentSearch();
+					return;
+				}
+			}
+			else if (direction == 3) {
+				if (col-1 >= 0 && grid[row][col-1] == -1) {
+					col--;
+					hitSunkMiss = placeMove(this.letters[row] + String.valueOf(col));
+				}
+				else if (col-1 >= 0){
+					while(grid[row][col-1] != -1) {
+						col--;
+						if (col < 0) {
+							wasHit = false;
+							makeMove();
+							return;
+						}
+					}
+					hitSunkMiss = placeMove(this.letters[row] + String.valueOf(col));
+				}
+				else {
+					nextDirection();
+					intelligentSearch();
+					return;
+				}
+			}
 
-        if(direction.equals("RIGHT"))
-        {
-            char c = ' ';
-            switch(lastHit[0])
-            {
-                case 0:
-                    c = 'A';
-                    break;
-                case 1:
-                    c = 'B';
-                    break;
-                case 2:
-                    c = 'C';
-                    break;
-                case 3:
-                    c = 'D';
-                    break;
-                case 4:
-                    c = 'E';
-                    break;
-                case 5:
-                    c = 'F';
-                    break;
-                case 6:
-                    c = 'G';
-                    break;
-                case 7:
-                    c = 'H';
-                    break;
-            }
-
-            String s = "" + c;
-            if(lastHit[1] < 7)
-            {
-                int i = lastHit[1] + 1;
-                s += i;
-                String s2 = placeMove(s);
-                if(s2.equals("HIT"))
-                {
-                    lastHit[1] = i;
-                }
-                if(s2.equals("MISS"))
-                {
-                    direction = "LEFT";
-                }
-                if(s2.equals("SUNK"))
-                {
-                    wasHit = true;
-                }
-                return;
-            }
-            else
-            {
-                direction = "LEFT";
-                intelligentSearch();
-                return;
-            }
-        }
-
-        if(direction.equals("RIGHT"))
-        {
-            char c = ' ';
-            switch(lastHit[0])
-            {
-                case 0:
-                    c = 'A';
-                    break;
-                case 1:
-                    c = 'B';
-                    break;
-                case 2:
-                    c = 'C';
-                    break;
-                case 3:
-                    c = 'D';
-                    break;
-                case 4:
-                    c = 'E';
-                    break;
-                case 5:
-                    c = 'F';
-                    break;
-                case 6:
-                    c = 'G';
-                    break;
-                case 7:
-                    c = 'H';
-                    break;
-            }
-
-            String s = "" + c;
-            if(lastHit[1] > 0)
-            {
-                int i = lastHit[1] - 1;
-                s += i;
-                String s2 = placeMove(s);
-                if(s2.equals("HIT"))
-                {
-                   lastHit[1] = i;
-                }
-                if(s2.equals("MISS"))
-                {
-                    direction = "UP";
-                }
-                if(s2.equals("SUNK"))
-                {
-                    wasHit = true;
-                }
-                return;
-            }
-            else
-            {
-                direction = "UP";
-                intelligentSearch();
-                return;
-            }
-        }
+			if (hitSunkMiss.equals("Hit")) {
+				this.grid[row][col] = 1;
+				wasHit = true;
+				// Pass to intelligent search
+				lastHit[0] = row;
+				lastHit[1] = col;
+			} else if (hitSunkMiss.equals("Sunk")) {
+				this.grid[row][col] = 1;
+				wasHit = false;
+			} else {
+				this.grid[row][col] = 0;
+			}
     }
 
 	void placeShips(String opponentID) {
